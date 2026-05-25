@@ -15,13 +15,16 @@ For imperfect handwriting (tight or inclined lines with no clean zero-pixel rows
 
 Red horizontal lines show where the image would be split into text lines (no cropping is performed).
 
-**Before** (original):
-
-![Before](test-before.jpg)
-
-**After** (split preview):
-
-![After](test-after.jpg)
+<table>
+  <tr>
+    <td width="50%" align="center"><b>Before</b> (original)</td>
+    <td width="50%" align="center"><b>After</b> (split preview)</td>
+  </tr>
+  <tr>
+    <td align="center"><img src="test-before.jpg" width="400"/></td>
+    <td align="center"><img src="test-after.jpg" width="400"/></td>
+  </tr>
+</table>
 
 ## File Structure
 
