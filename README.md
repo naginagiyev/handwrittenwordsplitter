@@ -1,9 +1,72 @@
-﻿# handwrittenwordsplitter
-Imagine you have an image that contains a handwritting (or can be computer text) and you want a code that divide this image into seperate images and save them. Each image contains a word that is cropped from main image. This code is the implementation of it using python. 
+﻿# Handwritten Word Splitter
 
-In this code I have used libraries such as numpy, PIL, cv2, plotly etc. There is not any machine learning or deep learning libraries such as Tensorflow, PyTorch or Scikit-learn. Everything is from scratch (pixel based codes using numpy). I have used simple OCR(Optical Character Recognition) concepts to build this algorithm.
+A pixel-based algorithm that segments a text image (handwritten or printed) into individual word images. No machine learning — only classical image processing with NumPy and OpenCV.
 
-If you want to test this code, you can simply clone the repository and run all codes orderly in the notebook file. But before the running do not forget to create a folder called "cropped_images" in your project folder. This folder is the place where your cropped images will be saved.
+## How It Works
 
-info:
-written by nagi nagiyev in 03.21.2024
+The algorithm runs in two stages:
+
+1. **Line segmentation** — counts black pixels row by row. Rows with zero black pixels mark gaps between lines. The midpoint of each gap becomes a horizontal split boundary.
+2. **Word segmentation** — for each line, counts black pixels column by column. Gaps between words are wider than gaps between letters. The algorithm finds the inflection point in gap-width distribution to distinguish word spaces from letter spaces, then splits accordingly.
+
+For imperfect handwriting (tight or inclined lines with no clean zero-pixel rows), set `usePerfectDivide = True` in `main.py` to find the minimum-density row within each inter-line region instead.
+
+## Preview
+
+Red horizontal lines show where the image would be split into text lines (no cropping is performed).
+
+**Before** (original):
+
+![Before](test-before.jpg)
+
+**After** (split preview):
+
+![After](test-after.jpg)
+
+## File Structure
+
+```
+handwrittenwordsplitter/
+├── utils.py         # Binarization, pixel counting, cropping helpers
+├── analysis.py      # Split-point detection logic
+├── splitter.py      # Full splitting pipeline
+├── visualize.py     # Preview horizontal split lines without cropping
+├── main.py          # Entry point — set image path and options here
+├── requirements.txt
+└── test-before.jpg  # Sample input image
+```
+
+## Installation
+
+```bash
+pip install -r requirements.txt
+```
+
+## Usage
+
+Edit the settings at the top of `main.py`:
+
+```python
+imagePath = "test-before.jpg"
+outputDir = "crops"
+afterPath = "test-after.jpg"
+usePerfectDivide = False
+runPreview = True
+runSplit = True
+```
+
+Then run:
+
+```bash
+python main.py
+```
+
+- `runPreview` — reads `imagePath` and saves `test-after.jpg` with red horizontal line markers (the before image is your input file as-is).
+- `runSplit` — writes individual word images to `outputDir`.
+
+## Dependencies
+
+- [opencv-python](https://pypi.org/project/opencv-python/) — image I/O and morphological operations
+- [numpy](https://numpy.org/) — pixel-level array computation
+- [Pillow](https://python-pillow.org/) — image drawing utilities
+- [toolz](https://toolz.readthedocs.io/) — functional pipeline composition
